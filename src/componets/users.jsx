@@ -20,20 +20,19 @@ const Users=()=>{
         if (number > 10 && number < 20) humans = "человек";
        // console.log(number)
         return number !== 0 ? (
-      <h1 className="badge fs-4 bg-primary m-2">
-        {number} {humans} c тобой хотят познакомится. </h1>
+      <h1 className="badge fs-4 bg-primary m-2 mx-3">
+         C тобой хотят познакомится {number} {humans}. </h1>
     ) : (
-      <h1 className="badge fs-4 bg-danger m-2">
+      <h1 className="badge fs-4 bg-danger m-2 mx-3">
         Нет подходящих людей для знакомства.
       </h1>
     );
     };
     
-    return (
-       
+    return ( 
         <>
             {renderPhrase(users.length)}
-            <table className="table">
+            <table className={!users.length ? "invisible" : "visible" && "mx-3 table"} >
                 <thead>
                     <tr>
                         <th scope="col">Имя</th>
