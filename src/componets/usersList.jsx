@@ -25,11 +25,14 @@ const UsersList = () => {
         setUsers(users.filter((user) => user._id !== userId));
     };
     const handleToggleBookMark = (id) => {
-        setUsers((prevUsers) => {
-            const indexEl = prevUsers.findIndex((user) => user._id === id);
-            prevUsers[indexEl].bookmark = !prevUsers[indexEl].bookmark;
-            return [...prevUsers];
-        });
+        setUsers(
+            users.map((user) => {
+                if (user._id === id) {
+                    return { ...user, bookmark: !user.bookmark };
+                }
+                return user;
+            })
+        );
     };
 
     useEffect(() => {
