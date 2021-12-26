@@ -6,28 +6,50 @@ const GroupList = ({
     valueProperty,
     contentProperty,
     onItemSelect,
-    selectedItems
+    selectedItem
 }) => {
-    return (
-        <ul className="list-group">
-            {(typeof items === "object" ? Object.keys(items) : items).map(
-                (item) => (
+    if (!Array.isArray(items)) {
+        return (
+            <ul className="list-group">
+                {Object.keys(items).map((item) => (
                     <li
                         key={items[item][valueProperty]}
                         className={
                             "list-group-item " +
-                            (items[item] === selectedItems ? "active" : "")
+                               (items[item] === selectedItem
+                                   ? "active"
+                                   : "")
                         }
                         onClick={() => onItemSelect(items[item])}
                         role="button"
                     >
                         {items[item][contentProperty]}
                     </li>
-                )
-            )}
+                ))}
+            </ul>
+        );
+    }
+    return (
+        <ul className="list-group">
+            {items.map((item) => (
+                <li
+                    key={item[valueProperty]}
+                    className={
+                        "list-group-item " +
+                            (item === selectedItem
+                                ? "active"
+                                : "")
+                    }
+                    onClick={() => onItemSelect(item)}
+                    role="button"
+                >
+                    {item[contentProperty]}
+                </li>
+            ))}
         </ul>
     );
 };
+
 GroupList.defaultProps = {
     valueProperty: "_id",
     contentProperty: "name"
@@ -37,7 +59,7 @@ GroupList.propTypes = {
     valueProperty: PropTypes.string.isRequired,
     contentProperty: PropTypes.string.isRequired,
     onItemSelect: PropTypes.func,
-    selectedItems: PropTypes.object
+    selectedItem: PropTypes.object
 };
 
 export default GroupList;
