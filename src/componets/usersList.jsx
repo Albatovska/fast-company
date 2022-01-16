@@ -7,12 +7,14 @@ import SearchStatus from "../componets/searchStatus";
 import GroupList from "./groupList";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import UsersSearch from "./usersSearch";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchValue, setSearchValue] = useState("");
     const pageSize = 4;
 
     const [users, setUsers] = useState();
@@ -34,7 +36,10 @@ const UsersList = () => {
             })
         );
     };
-
+    const clearFilter = () => {
+        setSearchValue("");
+        setSelectedProf();
+    };
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
@@ -43,6 +48,7 @@ const UsersList = () => {
     }, [selectedProf]);
 
     const handleProfessionSelect = (item) => {
+        clearFilter();
         setSelectedProf(item);
     };
     const handlePageChange = (pageIndex) => {
@@ -52,10 +58,15 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
-            : users;
+            : searchValue
+                ? users.filter((user) =>
+                    user.name.toLowerCase().includes(searchValue.toLowerCase())
+                )
+                : users;
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
@@ -64,8 +75,10 @@ const UsersList = () => {
         );
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         // users for current page
-        const clearFilter = () => {
-            setSelectedProf();
+
+        const handleSearchUsers = (e) => {
+            clearFilter();
+            setSearchValue(e.target.value);
         };
         return (
             <div className="d-flex">
@@ -87,6 +100,10 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <UsersSearch
+                        onChange={handleSearchUsers}
+                        searchValue={searchValue}
+                    />
                     {count > 0 && (
                         <UserTable
                             users={userCrop}
