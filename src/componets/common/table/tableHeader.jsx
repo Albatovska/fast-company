@@ -14,13 +14,11 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
     };
     const handleToggleIcon = (colomn) => {
         if (selectedSort.path === colomn.path) {
-            return selectedSort.order === "asc"
-                ? (
-                    <i className="bi bi-caret-up-fill" />
-                )
-                : (
-                    <i className="bi bi-caret-down-fill" />
-                );
+            return selectedSort.order === "asc" ? (
+                <i className="bi bi-caret-up-fill" />
+            ) : (
+                <i className="bi bi-caret-down-fill" />
+            );
         }
         return null;
     };
